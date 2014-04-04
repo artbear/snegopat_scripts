@@ -259,13 +259,18 @@ SyntaxAnalysis.AnalyseModule = function (sourceCode, initValueTable, textWindow)
                                 //metadataName = Matches[1].slice(0, Matches[1].indexOf('.'));
                                 try{
                                     mdObject = rootObject.childObject(callArray[0], callArray[1]);
-                                    addToCalls = true;
+                                    if(mdObjec.name.toString().length>0){
+                                        addToCalls = true;
+                                    }
+                                        
                                 } catch(e){}
                             } else if(callArray.length > 1 && callArray[0].length > 0) {
                                 //Тут по общим модулям пройдемся. 
                                 try{
                                     mdObject = rootObject.childObject("ОбщиеМодули", callArray[0]);
-                                    addToCalls = true;
+                                    if(mdObjec.name.toString().length>0){
+                                        addToCalls = true;
+                                    }
                                 } catch(e){}
                             } 
 

@@ -1672,6 +1672,9 @@ FuncProcPanel.prototype.walkMethods = function(row, method, req){
 FuncProcPanel.prototype.goToFunction = function(row){
     
     nameMethod = row.Имя;
+    var Родитель = row.Родитель;
+    if (!Родитель)
+        return;
     
     var callArray = [];
     findByName = false;
@@ -1758,7 +1761,15 @@ FuncProcPanel.prototype.goToFunction = function(row){
                         var method = parseModule._methodsByName[callArray[callArray.length-1]];
                         if (method){
 
-                            (new TextWindowsWatcherGoToLine(method.StartLine)).startWatch();
+                            if(Родитель.Имя == "Используют в"){
+                               //curRowMethodName = nameMethod;
+                               nameMethod = curRow.Method;
+                            } else{
+                                //curRowMethodName = Родитель.Имя;
+                                nameMethod = row.Имя;
+                            }
+
+                            (new TextWindowsWatcherGoToLine(method.StartLine, nameMethod)).startWatch();
                             mdObject.openModule(mdPropName);
                             return;
 
@@ -1776,7 +1787,7 @@ FuncProcPanel.prototype.goToFunction = function(row){
 
     } else {
         var method = this.getMethod(this.methods, nameMethod);
-        if(method!=undefined){
+        if(method!=undefined && Родитель.Имя !="Используют в"){
             if (!this.targetWindow){
                 Message("Не найденно целевое окно. ");
                 return;
@@ -1807,13 +1818,13 @@ FuncProcPanel.prototype.goToFunction = function(row){
         var curRow = this.form.Controls.FunctionList.CurrentRow;
 
         curRowMethodName = "";
-        if (row.Родитель.Имя == "Параметры" || row.Родитель.Имя == "Вызывает"){
+        if (Родитель.Имя == "Параметры" || Родитель.Имя == "Вызывает"){
             curRowMethodName = curRow.Method;
-        } else if(row.Родитель.Имя == "Используют в"){
+        } else if(Родитель.Имя == "Используют в"){
             curRowMethodName = nameMethod;
             nameMethod = curRow.Method;
         } else{
-            curRowMethodName = row.Родитель.Имя;
+            curRowMethodName = Родитель.Имя;
             nameMethod = row.Имя;
         }
 
@@ -1830,12 +1841,12 @@ FuncProcPanel.prototype.goToFunction = function(row){
         for(var lineIx=curRowMethod.StartLine; lineIx < lines.length; lineIx++)
         {
             var line = lines[lineIx];
-            if (line.indexOf(nameMethod)>=0){
-                
+            var index = line.indexOf(nameMethod);
+            if (index>=0){
                 // Переведем фокус в окно текстового редактора.
                 this.activateEditor();
                 this.targetWindow.SetCaretPos(lineIx+1, line.indexOf(nameMethod));
-                //this.targetWindow.SetSelection(lineIx+1, line.indexOf(nameMethod), lineIx+1, nameMethod.length);
+                this.targetWindow.SetSelection(lineIx+1, index+1, lineIx+1, index+1+nameMethod.length);
                 break;
             }
         }
@@ -1866,6 +1877,8 @@ FuncProcPanel.prototype.FunctionListПриАктивизацииСтроки = f
 
         this.form.СтруктураМетода.Rows.Clear();
          var curRow = this.form.Controls.FunctionList.CurrentRow;
+         if (!curRow)
+            return;
          var curRowMethod = getMethod(this.methods, curRow.Method);
          if(!curRowMethod){
             return;
@@ -1995,10 +2008,15 @@ events.connect(Designer, "beforeExitApp", GetFuncProcPanel());
 
 TextWindowsWatcherGoToLine = stdlib.Class.extend({
 
-    construct : function(LineNo) {
+    construct : function(LineNo, LineToFind) {
         this.timerId = 0;
         this.lastActiveTextWindow = null;
         this.Line = LineNo;
+        if (LineToFind == undefined){
+            this.Name = "";
+        } else {
+            this.Name = LineToFind;    
+        }
         this.startWatch();
     },
 
@@ -2028,6 +2046,20 @@ TextWindowsWatcherGoToLine = stdlib.Class.extend({
         wnd = this.getActiveTextWindow()
         if (wnd){
             var LineNo = this.Line;
+
+            var lines = StringUtils.toLines(wnd.GetText());
+            for(var lineIx = LineNo; lineIx < lines.length; lineIx++)
+            {
+                var line = lines[lineIx];
+                var index = line.indexOf(this.Name);
+                if (index>=0){
+                    // Переведем фокус в окно текстового редактора.
+                    wnd.SetCaretPos(lineIx+1, index+1);
+                    wnd.SetSelection(lineIx+1, index+1, lineIx+1, index+1+this.Name.length);
+                    return;
+                }
+            }
+
             var textline = wnd.GetLine(LineNo+1);
             wnd.SetCaretPos(LineNo+2, 1);
             wnd.SetSelection(LineNo+1, 1, LineNo+1, textline.length-1);
