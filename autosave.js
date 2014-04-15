@@ -91,7 +91,10 @@ function onTimer(timerID)
     if(isAutoCheck)
         profileRoot.setValue("ModuleTextEditor/CheckAutomatically", false)
     // Сохраним конфигурацию
-    stdcommands.Config.Save.send()
+    try{
+        if(stdcommands.Config.Save.getState().enabled)
+            stdcommands.Config.Save.send()
+    }catch(e){}
     // Сохраним все не сохраннеые файлы...
     
     function isAlive(view)
