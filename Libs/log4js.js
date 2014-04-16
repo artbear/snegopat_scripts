@@ -5,6 +5,22 @@ $addin stdlib
 $addin global
 
 /*
+Пример подключения в скриптах Снегопата
+	var logger = Log4js.getLogger(SelfScript.uniqueName);
+	var appender = new Log4js.BrowserConsoleAppender();
+	appender.setLayout(new Log4js.PatternLayout(Log4js.PatternLayout.TTCC_CONVERSION_PATTERN));
+	// следующий код нужен, чтобы при перезапуске скрипта без перезапуска Конфигуратора лог не задвоится
+	appenders = [];
+	appenders.push(appender);
+	logger.onlog = new Log4js.CustomEvent();
+	logger.onclear = new Log4js.CustomEvent();
+
+	logger.setAppenders(appenders); // конец блока исключения задвоения лога
+
+	logger.setLevel(Log4js.Level.ERROR); //logger.setLevel(Log4js.Level.DEBUG);
+*/
+
+/*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
