@@ -1,6 +1,6 @@
 $engine JScript
 $uname xUnitAddTestsDesc
-$dname Добавить описания тестовых случае xUnitFor1C
+$dname Р”РѕР±Р°РІРёС‚СЊ РѕРїРёСЃР°РЅРёСЏ С‚РµСЃС‚РѕРІС‹С… СЃР»СѓС‡Р°Рµ xUnitFor1C
 $addin global
 $addin stdlib
 $addin stdcommands
@@ -11,39 +11,39 @@ global.connectGlobals(SelfScript);
 
 var logger = addLogger(SelfScript.uniqueName, Log4js.Level.DEBUG); //var logger = addLogger(SelfScript.uniqueName, Log4js.Level.ERROR);
 
-var	TEST_CASE_DESC_FUNC_NAME = 'ПолучитьСписокТестов'
+var	TEST_CASE_DESC_FUNC_NAME = 'РџРѕР»СѓС‡РёС‚СЊРЎРїРёСЃРѕРєРўРµСЃС‚РѕРІ'
 var TEST_CASE_DESC_FUNC_TEMPLATE = 
-"Перем юТест;\n\n\
-Функция ПолучитьСписокТестов(ЮнитТестирование) Экспорт\n\
+"РџРµСЂРµРј СЋРўРµСЃС‚;\n\n\
+Р¤СѓРЅРєС†РёСЏ РџРѕР»СѓС‡РёС‚СЊРЎРїРёСЃРѕРєРўРµСЃС‚РѕРІ(Р®РЅРёС‚РўРµСЃС‚РёСЂРѕРІР°РЅРёРµ) Р­РєСЃРїРѕСЂС‚\n\
 \n\
-	юТест = ЮнитТестирование;\n\
+	СЋРўРµСЃС‚ = Р®РЅРёС‚РўРµСЃС‚РёСЂРѕРІР°РЅРёРµ;\n\
 \n\
-	ВсеТесты = Новый Массив;\n\
+	Р’СЃРµРўРµСЃС‚С‹ = РќРѕРІС‹Р№ РњР°СЃСЃРёРІ;\n\
 \n\
-	Возврат ВсеТесты;\n\
+	Р’РѕР·РІСЂР°С‚ Р’СЃРµРўРµСЃС‚С‹;\n\
 \n\
-КонецФункции\n"
+РљРѕРЅРµС†Р¤СѓРЅРєС†РёРё\n"
 
 function addLogger(loggerName, logLevel) {
 	var logger = Log4js.getLogger(loggerName);
 	var appender = new Log4js.BrowserConsoleAppender();
 	appender.setLayout(new Log4js.PatternLayout(Log4js.PatternLayout.TTCC_CONVERSION_PATTERN));
-	// следующий код нужен, чтобы при перезапуске скрипта без перезапуска Конфигуратора лог не задвоится
+	// СЃР»РµРґСѓСЋС‰РёР№ РєРѕРґ РЅСѓР¶РµРЅ, С‡С‚РѕР±С‹ РїСЂРё РїРµСЂРµР·Р°РїСѓСЃРєРµ СЃРєСЂРёРїС‚Р° Р±РµР· РїРµСЂРµР·Р°РїСѓСЃРєР° РљРѕРЅС„РёРіСѓСЂР°С‚РѕСЂР° Р»РѕРі РЅРµ Р·Р°РґРІРѕРёС‚СЃСЏ
 	appenders = [];
 	appenders.push(appender);
 	logger.onlog = new Log4js.CustomEvent();
 	logger.onclear = new Log4js.CustomEvent();
 
-	logger.setAppenders(appenders); // конец блока исключения задвоения лога
+	logger.setAppenders(appenders); // РєРѕРЅРµС† Р±Р»РѕРєР° РёСЃРєР»СЋС‡РµРЅРёСЏ Р·Р°РґРІРѕРµРЅРёСЏ Р»РѕРіР°
 	//logger.addAppender(new Log4js.FileAppender("f:\\somefile.log"));
 	logger.setLevel(logLevel);
 	return logger;
 }
 
-SelfScript.self['macrosВставить определения тестовых случаев xUnitFor1C'] = function() {
+SelfScript.self['macrosР’СЃС‚Р°РІРёС‚СЊ РѕРїСЂРµРґРµР»РµРЅРёСЏ С‚РµСЃС‚РѕРІС‹С… СЃР»СѓС‡Р°РµРІ xUnitFor1C'] = function() {
 	var tw = GetTextWindow();
 	if (!tw || tw.IsReadOnly()) {
-		logger.debug('Не нашли текстовое окно или окно для чтения')
+		logger.debug('РќРµ РЅР°С€Р»Рё С‚РµРєСЃС‚РѕРІРѕРµ РѕРєРЅРѕ РёР»Рё РѕРєРЅРѕ РґР»СЏ С‡С‚РµРЅРёСЏ')
 		return true;
 	}
 		
@@ -55,12 +55,12 @@ SelfScript.self['macrosВставить определения тестовых случаев xUnitFor1C'] = func
 		
 	var procNames = getTestCases(parser)
 	if(!procNames){
-		logger.debug('Не нашли определения тестовых случаев')
+		logger.debug('РќРµ РЅР°С€Р»Рё РѕРїСЂРµРґРµР»РµРЅРёСЏ С‚РµСЃС‚РѕРІС‹С… СЃР»СѓС‡Р°РµРІ')
 		return true
 	}
 	if (-1 == indexTestCaseDescFunc) {
-		logger.debug('Не нашли функцию описания тестов "'+TEST_CASE_DESC_FUNC_NAME+'"')
-		logger.debug('Вставляю шаблон функции описания тестов "'+TEST_CASE_DESC_FUNC_NAME+'"')
+		logger.debug('РќРµ РЅР°С€Р»Рё С„СѓРЅРєС†РёСЋ РѕРїРёСЃР°РЅРёСЏ С‚РµСЃС‚РѕРІ "'+TEST_CASE_DESC_FUNC_NAME+'"')
+		logger.debug('Р’СЃС‚Р°РІР»СЏСЋ С€Р°Р±Р»РѕРЅ С„СѓРЅРєС†РёРё РѕРїРёСЃР°РЅРёСЏ С‚РµСЃС‚РѕРІ "'+TEST_CASE_DESC_FUNC_NAME+'"')
 		
 		tw.InsertLine(1, TEST_CASE_DESC_FUNC_TEMPLATE);
 		
@@ -78,7 +78,7 @@ SelfScript.self['macrosВставить определения тестовых случаев xUnitFor1C'] = func
 		var arrayName = data.ArrayName
 		deleteExistTestCaseDesc(tw, data.BeginLine, line, procNames, arrayName)
 		
-		parser = snegopat.parseSources(tw.text()) // т.к. изменили текст, заново парсим
+		parser = snegopat.parseSources(tw.text()) // С‚.Рє. РёР·РјРµРЅРёР»Рё С‚РµРєСЃС‚, Р·Р°РЅРѕРІРѕ РїР°СЂСЃРёРј
 			logger.debug('parser.reStream ' + parser.reStream)
 		
 		data = getLineForInsertTestCaseDescriptions(parser, indexTestCaseDescFunc);
@@ -89,7 +89,7 @@ SelfScript.self['macrosВставить определения тестовых случаев xUnitFor1C'] = func
 		}
 	}
 	else
-		logger.debug('Не удалось получить позицию для вставки описания тестовых случаев')
+		logger.debug('РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕР»СѓС‡РёС‚СЊ РїРѕР·РёС†РёСЋ РґР»СЏ РІСЃС‚Р°РІРєРё РѕРїРёСЃР°РЅРёСЏ С‚РµСЃС‚РѕРІС‹С… СЃР»СѓС‡Р°РµРІ')
 		
 	return true;
 }
@@ -97,14 +97,14 @@ SelfScript.self['macrosВставить определения тестовых случаев xUnitFor1C'] = func
 function deleteExistTestCaseDesc(tw, beginLine, endLine, procNames, arrayName) {
 	var range = tw.Range(beginLine, 1, endLine)
 	var text = range.GetText()
-		logger.debug('Текст функции '+TEST_CASE_DESC_FUNC_NAME + '\n'+text)
+		logger.debug('РўРµРєСЃС‚ С„СѓРЅРєС†РёРё '+TEST_CASE_DESC_FUNC_NAME + '\n'+text)
 	
 	for(i=0; i < procNames.length; i++) {
-		var reTestCaseDesc = new RegExp( '^\\s*'+arrayName+'\\.Добавить\\(\\s*"'+procNames[i]+'"\\s*\\)\\s*;\\s*$', "igm");
-			logger.debug('Регулярное выражение шаблона замены '+reTestCaseDesc.source)
+		var reTestCaseDesc = new RegExp( '^\\s*'+arrayName+'\\.Р”РѕР±Р°РІРёС‚СЊ\\(\\s*"'+procNames[i]+'"\\s*\\)\\s*;\\s*$', "igm");
+			logger.debug('Р РµРіСѓР»СЏСЂРЅРѕРµ РІС‹СЂР°Р¶РµРЅРёРµ С€Р°Р±Р»РѕРЅР° Р·Р°РјРµРЅС‹ '+reTestCaseDesc.source)
 		text = text.replace(reTestCaseDesc,"");
 	}
-		logger.debug('Новый текст функции '+TEST_CASE_DESC_FUNC_NAME + '\n'+text)
+		logger.debug('РќРѕРІС‹Р№ С‚РµРєСЃС‚ С„СѓРЅРєС†РёРё '+TEST_CASE_DESC_FUNC_NAME + '\n'+text)
 	range.SetText(text)
 }
 
@@ -112,9 +112,9 @@ function insertTestCaseDescIntoText(tw, line, procNames, arrayName){
 	logger.debug('arrayName <' + arrayName+'>')
 	array = new Array(procNames.length);
 	for(i=0; i < procNames.length; i++) {
-		str = '\t'+arrayName+'.Добавить("'+procNames[i]+'");';
+		str = '\t'+arrayName+'.Р”РѕР±Р°РІРёС‚СЊ("'+procNames[i]+'");';
 		array[i] = str;
-			logger.debug('Вставляю строку - ' + str)
+			logger.debug('Р’СЃС‚Р°РІР»СЏСЋ СЃС‚СЂРѕРєСѓ - ' + str)
 	}
 	array[procNames.length] = "";
 	tw.InsertLine(line, StringUtils.fromLines(array));
@@ -128,41 +128,41 @@ function getLineForInsertTestCaseDescriptions(parser, indexTestCaseDescFunc){
 	
 	strForStream = addStringToTheLeft(indexTestCaseDescFunc, "0", 6-(""+indexTestCaseDescFunc).length)
 
-		// ищу Функция ПолучитьСписокТестов(юТестирование) Экспорт ... ВсеТесты = Новый Массив; ... Возврат ВсеТесты; ...
+		// РёС‰Сѓ Р¤СѓРЅРєС†РёСЏ РџРѕР»СѓС‡РёС‚СЊРЎРїРёСЃРѕРєРўРµСЃС‚РѕРІ(СЋРўРµСЃС‚РёСЂРѕРІР°РЅРёРµ) Р­РєСЃРїРѕСЂС‚ ... Р’СЃРµРўРµСЃС‚С‹ = РќРѕРІС‹Р№ РњР°СЃСЃРёРІ; ... Р’РѕР·РІСЂР°С‚ Р’СЃРµРўРµСЃС‚С‹; ...
 	var reTestCaseDescriptionsFuncBody = new RegExp('FuNm('+strForStream+')LpNm(\\d{6})RpEx.*?(Nm(\\d{6})EqNwNm(\\d{6})).*?ReNm(\\d{6})', "g");
 	
 	lexemsArray = reTestCaseDescriptionsFuncBody.exec(parser.reStream)
 	var findRightBody = lexemsArray && lexemsArray.length >= 6
 	if(findRightBody)
     {
-   			logger.debug(TEST_CASE_DESC_FUNC_NAME + ' (конец) lexemsArray.index ' + lexemsArray.index + ' lexemsArray.lastIndex ' + lexemsArray.lastIndex )
+   			logger.debug(TEST_CASE_DESC_FUNC_NAME + ' (РєРѕРЅРµС†) lexemsArray.index ' + lexemsArray.index + ' lexemsArray.lastIndex ' + lexemsArray.lastIndex )
 		
-		var testCaseArrayName = parser.name(lexemsArray[4]) //ВсеТесты из строки "ВсеТесты = Новый Массив"
-		var arrayKeywordName = parser.name(lexemsArray[5]) // Массив из этой же строки
-		var returnValueName = parser.name(lexemsArray[6]) // Возврат ВсеТесты
-			logger.debug('Наименование массива имен тестовых случаев "' + testCaseArrayName+'"')
+		var testCaseArrayName = parser.name(lexemsArray[4]) //Р’СЃРµРўРµСЃС‚С‹ РёР· СЃС‚СЂРѕРєРё "Р’СЃРµРўРµСЃС‚С‹ = РќРѕРІС‹Р№ РњР°СЃСЃРёРІ"
+		var arrayKeywordName = parser.name(lexemsArray[5]) // РњР°СЃСЃРёРІ РёР· СЌС‚РѕР№ Р¶Рµ СЃС‚СЂРѕРєРё
+		var returnValueName = parser.name(lexemsArray[6]) // Р’РѕР·РІСЂР°С‚ Р’СЃРµРўРµСЃС‚С‹
+			logger.debug('РќР°РёРјРµРЅРѕРІР°РЅРёРµ РјР°СЃСЃРёРІР° РёРјРµРЅ С‚РµСЃС‚РѕРІС‹С… СЃР»СѓС‡Р°РµРІ "' + testCaseArrayName+'"')
 			
-		findRightBody = /массив/i.test(arrayKeywordName) && testCaseArrayName.toLowerCase() == returnValueName.toLowerCase()
+		findRightBody = /РјР°СЃСЃРёРІ/i.test(arrayKeywordName) && testCaseArrayName.toLowerCase() == returnValueName.toLowerCase()
 		if (findRightBody) {
 			
 	        var lex = parser.lexem(parser.posToLexem(lexemsArray.index))
-		       	logger.debug('Получили данные по началу функции "'+TEST_CASE_DESC_FUNC_NAME+';" , строка ' + lex.line)
+		       	logger.debug('РџРѕР»СѓС‡РёР»Рё РґР°РЅРЅС‹Рµ РїРѕ РЅР°С‡Р°Р»Сѓ С„СѓРЅРєС†РёРё "'+TEST_CASE_DESC_FUNC_NAME+';" , СЃС‚СЂРѕРєР° ' + lex.line)
 			resBeginLine = lex.line
 				
 	        var lex = parser.lexem(parser.posToLexem(lexemsArray.lastIndex))
-		       	logger.debug('Получили данные по строке "Возврат '+testCaseArrayName+';" , строка ' + lex.line)
+		       	logger.debug('РџРѕР»СѓС‡РёР»Рё РґР°РЅРЅС‹Рµ РїРѕ СЃС‚СЂРѕРєРµ "Р’РѕР·РІСЂР°С‚ '+testCaseArrayName+';" , СЃС‚СЂРѕРєР° ' + lex.line)
 				
 			ret = { BeginLine: resBeginLine, EndLine: lex.line, ArrayName: testCaseArrayName }
 		}
 		else {
-			logger.error('Должна быть строка "Массив". А получили "' + arrayKeywordName+'"')
-			logger.error('Должна быть строка "'+testCaseArrayName+'". А получили "' + returnValueName+'"')
+			logger.error('Р”РѕР»Р¶РЅР° Р±С‹С‚СЊ СЃС‚СЂРѕРєР° "РњР°СЃСЃРёРІ". Рђ РїРѕР»СѓС‡РёР»Рё "' + arrayKeywordName+'"')
+			logger.error('Р”РѕР»Р¶РЅР° Р±С‹С‚СЊ СЃС‚СЂРѕРєР° "'+testCaseArrayName+'". Рђ РїРѕР»СѓС‡РёР»Рё "' + returnValueName+'"')
 		}
     }
 	else {
-		logger.error('Не нашли функцию '+TEST_CASE_DESC_FUNC_NAME+' с необходимой структурой');
+		logger.error('РќРµ РЅР°С€Р»Рё С„СѓРЅРєС†РёСЋ '+TEST_CASE_DESC_FUNC_NAME+' СЃ РЅРµРѕР±С…РѕРґРёРјРѕР№ СЃС‚СЂСѓРєС‚СѓСЂРѕР№');
 		if(lexemsArray)
-			logger.error('Количество элементов в массиве разбора лексем (lexemsArray.length) должно быть больше или равно 6, а получили "' + lexemsArray.length+'"')
+			logger.error('РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РІ РјР°СЃСЃРёРІРµ СЂР°Р·Р±РѕСЂР° Р»РµРєСЃРµРј (lexemsArray.length) РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РёР»Рё СЂР°РІРЅРѕ 6, Р° РїРѕР»СѓС‡РёР»Рё "' + lexemsArray.length+'"')
 	}
 	return ret;
 }
@@ -171,14 +171,14 @@ function getTestCases(parser){
 	var res = new Array();
     var reStream = parser.reStream
     var rePublicProcedureWithoutParams = /(Pc)Nm\d{6}LpRpEx/g
-    var reTestCaseName = /^тест/i
+    var reTestCaseName = /^С‚РµСЃС‚/i
 
     while(rePublicProcedureWithoutParams.exec(reStream))
     {
         var lex = parser.lexem(parser.posToLexem(RegExp.index + 2))
-       	logger.debug('проверяю процедуру ' + lex.text + ", строка " + lex.line)
+       	logger.debug('РїСЂРѕРІРµСЂСЏСЋ РїСЂРѕС†РµРґСѓСЂСѓ ' + lex.text + ", СЃС‚СЂРѕРєР° " + lex.line)
         if (reTestCaseName.exec(lex.text)){
-        	logger.debug('\tнашли тестовый случай ' + lex.text + ", строка " + lex.line)
+        	logger.debug('\tРЅР°С€Р»Рё С‚РµСЃС‚РѕРІС‹Р№ СЃР»СѓС‡Р°Р№ ' + lex.text + ", СЃС‚СЂРѕРєР° " + lex.line)
         	res.push( lex.text )
         }
     }
