@@ -1,4 +1,4 @@
-$engine JScript
+﻿$engine JScript
 $uname xUnitAddTestsDesc
 $dname Добавить описания тестовых случае xUnitFor1C
 $addin global

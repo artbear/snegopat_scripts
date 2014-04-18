@@ -1,13 +1,13 @@
-$engine JScript
+п»ї$engine JScript
 $uname test_xUnitAddTestsDesc
-$dname Тесты работы xUnitAddTestsDesc.js
+$dname РўРµСЃС‚С‹ СЂР°Р±РѕС‚С‹ xUnitAddTestsDesc.js
 $addin global
 $addin stdcommands
 $addin stdlib
 
 //global.connectGlobals(SelfScript);
 
-// регулярка для поиска всех функций JScript - удобно юзать в Notepad++ 
+// СЂРµРіСѓР»СЏСЂРєР° РґР»СЏ РїРѕРёСЃРєР° РІСЃРµС… С„СѓРЅРєС†РёР№ JScript - СѓРґРѕР±РЅРѕ СЋР·Р°С‚СЊ РІ Notepad++ 
 //      ^function\s*([^\(]+)\(
 //      (^function\s*[^\(\s]+\s*\()|(^[^\.\s]+\.prototype\.[^\.\s]+\s+)
 
@@ -15,7 +15,7 @@ stdlib.require('jsUnitCore.js', SelfScript);
 
 var mainFolder = profileRoot.getValue("Snegopat/MainFolder");
 var testDir = mainFolder + 'scripts\\Tests\\Automated\\xUnitFor1C\\AddTestsDesc\\';
-var pluginAppender = stdlib.require(mainFolder + 'scripts\\xUnitAddTestsDesc.js'); //, SelfScript); // чтобы вызывать функции из основного скрипта
+var pluginAppender = stdlib.require(mainFolder + 'scripts\\xUnitAddTestsDesc.js'); //, SelfScript); // С‡С‚РѕР±С‹ РІС‹Р·С‹РІР°С‚СЊ С„СѓРЅРєС†РёРё РёР· РѕСЃРЅРѕРІРЅРѕРіРѕ СЃРєСЂРёРїС‚Р°
 
 var TWW = stdlib.require('TextWindow.js');
 
@@ -27,7 +27,7 @@ var appender = null;
 function setUp()
 {
     textDoc = v8New("TextDocument");
-	var text = "Таб = Новый ТаблицаЗначений;\nТаб";
+	var text = "РўР°Р± = РќРѕРІС‹Р№ РўР°Р±Р»РёС†Р°Р—РЅР°С‡РµРЅРёР№;\nРўР°Р±";
     textDoc.SetText(text);
 
     textDoc.Show();
@@ -47,22 +47,22 @@ function destroyTextWindow()
     if (twnd)
         delete twnd;
     
-    // Чтобы при закрытии не выдавалось сообщение "Записать?", сохраним документ во временный файл.
+    // Р§С‚РѕР±С‹ РїСЂРё Р·Р°РєСЂС‹С‚РёРё РЅРµ РІС‹РґР°РІР°Р»РѕСЃСЊ СЃРѕРѕР±С‰РµРЅРёРµ "Р—Р°РїРёСЃР°С‚СЊ?", СЃРѕС…СЂР°РЅРёРј РґРѕРєСѓРјРµРЅС‚ РІРѕ РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р».
     var tempFile = globalContext("{4A993AB7-2F75-43CF-B34A-0AD9FFAEE7E3}").GetTempFileName();
     textDoc.Write(tempFile);
     
-    // Закроем окно текстового документа.
+    // Р—Р°РєСЂРѕРµРј РѕРєРЅРѕ С‚РµРєСЃС‚РѕРІРѕРіРѕ РґРѕРєСѓРјРµРЅС‚Р°.
     stdcommands.Frame.FileClose.send();    
     
-    // Удалим временный файл.
+    // РЈРґР°Р»РёРј РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р».
     var f = v8New("File", tempFile);
     globalContext("{22A21030-E1D6-46A0-9465-F0A5427BE011}").DeleteFiles(f.Path, f.Name);
 }
 
-SelfScript.self['macrosTest В модуле уже есть описания тестовых случаев'] = function() {
+SelfScript.self['macrosTest Р’ РјРѕРґСѓР»Рµ СѓР¶Рµ РµСЃС‚СЊ РѕРїРёСЃР°РЅРёСЏ С‚РµСЃС‚РѕРІС‹С… СЃР»СѓС‡Р°РµРІ'] = function() {
 
     var textDoc = v8New("TextDocument");
-	textDoc.Read(testDir+'xUnitAddTestsDesc_УжеЕстьОписанияТестов.txt')
+	textDoc.Read(testDir+'xUnitAddTestsDesc_РЈР¶РµР•СЃС‚СЊРћРїРёСЃР°РЅРёСЏРўРµСЃС‚РѕРІ.txt')
 	
 	var predLineCount = textDoc.LineCount();
 	var text = textDoc.GetText();
@@ -72,12 +72,12 @@ SelfScript.self['macrosTest В модуле уже есть описания тестовых случаев'] = func
 	var procNames = appender.getTestCases();
 		assertEquals(procNames.length, 2);
 		
-	var procName = 'ТестСОпциями_БезПараметра'
-		var reTestCaseDesc = new RegExp( '^\\s*ВсеТесты\\.Добавить\\(\\s*"'+procName+'"\\s*\\)\\s*;\\s*$', "igm");
-		assertFalse('Не нашли описание теста '+procName, reTestCaseDesc.test(text));
+	var procName = 'РўРµСЃС‚РЎРћРїС†РёСЏРјРё_Р‘РµР·РџР°СЂР°РјРµС‚СЂР°'
+		var reTestCaseDesc = new RegExp( '^\\s*Р’СЃРµРўРµСЃС‚С‹\\.Р”РѕР±Р°РІРёС‚СЊ\\(\\s*"'+procName+'"\\s*\\)\\s*;\\s*$', "igm");
+		assertFalse('РќРµ РЅР°С€Р»Рё РѕРїРёСЃР°РЅРёРµ С‚РµСЃС‚Р° '+procName, reTestCaseDesc.test(text));
 	
 	success = appender.addTestCaseDescriptionsIntoText();
-		assertTrue('Не успешно выполнили тест!', success);
+		assertTrue('РќРµ СѓСЃРїРµС€РЅРѕ РІС‹РїРѕР»РЅРёР»Рё С‚РµСЃС‚!', success);
 		assertEquals(twnd.LinesCount(), predLineCount+2);
 		
 	appender.parseSources();
@@ -87,21 +87,21 @@ SelfScript.self['macrosTest В модуле уже есть описания тестовых случаев'] = func
 	var text = twnd.GetText();
 	
 	for(i=0; i < procNames.length; i++) {
-		var reTestCaseDesc = new RegExp( '^\\s*ВсеТесты\\.Добавить\\(\\s*"'+procNames[i]+'"\\s*\\)\\s*;\\s*$', "igm");
-			//logger.debug('Регулярное выражение шаблона замены '+reTestCaseDesc.source)
-		assertTrue('Не нашли описание теста '+procNames[i], reTestCaseDesc.test(text));
+		var reTestCaseDesc = new RegExp( '^\\s*Р’СЃРµРўРµСЃС‚С‹\\.Р”РѕР±Р°РІРёС‚СЊ\\(\\s*"'+procNames[i]+'"\\s*\\)\\s*;\\s*$', "igm");
+			//logger.debug('Р РµРіСѓР»СЏСЂРЅРѕРµ РІС‹СЂР°Р¶РµРЅРёРµ С€Р°Р±Р»РѕРЅР° Р·Р°РјРµРЅС‹ '+reTestCaseDesc.source)
+		assertTrue('РќРµ РЅР°С€Р»Рё РѕРїРёСЃР°РЅРёРµ С‚РµСЃС‚Р° '+procNames[i], reTestCaseDesc.test(text));
 	}
 
-		//var txt = "перем Пример;\nПример = 2;";
+		//var txt = "РїРµСЂРµРј РџСЂРёРјРµСЂ;\nРџСЂРёРјРµСЂ = 2;";
 		//var arrStrings = txt.split("\n");
-		//assertTrue('Не успешно выполнили тест!', obInts.removeComments(arrStrings));
+		//assertTrue('РќРµ СѓСЃРїРµС€РЅРѕ РІС‹РїРѕР»РЅРёР»Рё С‚РµСЃС‚!', obInts.removeComments(arrStrings));
 }
 
-SelfScript.self['macrosTest В модуле вообще нет функции ПолучитьСписокТестов, но сами тестовые случаи определены'] = function() {
+SelfScript.self['macrosTest Р’ РјРѕРґСѓР»Рµ РІРѕРѕР±С‰Рµ РЅРµС‚ С„СѓРЅРєС†РёРё РџРѕР»СѓС‡РёС‚СЊРЎРїРёСЃРѕРєРўРµСЃС‚РѕРІ, РЅРѕ СЃР°РјРё С‚РµСЃС‚РѕРІС‹Рµ СЃР»СѓС‡Р°Рё РѕРїСЂРµРґРµР»РµРЅС‹'] = function() {
 	//pluginAppender.logger.setLevel(pluginAppender.Log4js.Level.DEBUG);
 	
     var textDoc = v8New("TextDocument");
-	textDoc.Read(testDir+'xUnitAddTestsDesc_НетПолучитьСписокТестов.txt')
+	textDoc.Read(testDir+'xUnitAddTestsDesc_РќРµС‚РџРѕР»СѓС‡РёС‚СЊРЎРїРёСЃРѕРєРўРµСЃС‚РѕРІ.txt')
 	
 	predLineCount = textDoc.LineCount()
 	var text = textDoc.GetText();
@@ -111,12 +111,12 @@ SelfScript.self['macrosTest В модуле вообще нет функции ПолучитьСписокТестов, но
 	var procNames = appender.getTestCases();
 		assertEquals(procNames.length, 2);
 		
-	var procName = 'ТестСОпциями_БезПараметра'
-		var reTestCaseDesc = new RegExp( '^\\s*ВсеТесты\\.Добавить\\(\\s*"'+procName+'"\\s*\\)\\s*;\\s*$', "igm");
-		assertFalse('Не нашли описание теста '+procName, reTestCaseDesc.test(text));
+	var procName = 'РўРµСЃС‚РЎРћРїС†РёСЏРјРё_Р‘РµР·РџР°СЂР°РјРµС‚СЂР°'
+		var reTestCaseDesc = new RegExp( '^\\s*Р’СЃРµРўРµСЃС‚С‹\\.Р”РѕР±Р°РІРёС‚СЊ\\(\\s*"'+procName+'"\\s*\\)\\s*;\\s*$', "igm");
+		assertFalse('РќРµ РЅР°С€Р»Рё РѕРїРёСЃР°РЅРёРµ С‚РµСЃС‚Р° '+procName, reTestCaseDesc.test(text));
 	
 	success = appender.addTestCaseDescriptionsIntoText();
-		assertTrue('Не успешно выполнили тест!', success);
+		assertTrue('РќРµ СѓСЃРїРµС€РЅРѕ РІС‹РїРѕР»РЅРёР»Рё С‚РµСЃС‚!', success);
 		assertEquals(twnd.LinesCount(), predLineCount + 15);
 		
 	appender.parseSources();
@@ -126,16 +126,16 @@ SelfScript.self['macrosTest В модуле вообще нет функции ПолучитьСписокТестов, но
 	var text = twnd.GetText();
 	
 	for(i=0; i < procNames.length; i++) {
-		var reTestCaseDesc = new RegExp( '^\\s*ВсеТесты\\.Добавить\\(\\s*"'+procNames[i]+'"\\s*\\)\\s*;\\s*$', "igm");
-			//logger.debug('Регулярное выражение шаблона замены '+reTestCaseDesc.source)
-		assertTrue('Не нашли описание теста '+procNames[i], reTestCaseDesc.test(text));
+		var reTestCaseDesc = new RegExp( '^\\s*Р’СЃРµРўРµСЃС‚С‹\\.Р”РѕР±Р°РІРёС‚СЊ\\(\\s*"'+procNames[i]+'"\\s*\\)\\s*;\\s*$', "igm");
+			//logger.debug('Р РµРіСѓР»СЏСЂРЅРѕРµ РІС‹СЂР°Р¶РµРЅРёРµ С€Р°Р±Р»РѕРЅР° Р·Р°РјРµРЅС‹ '+reTestCaseDesc.source)
+		assertTrue('РќРµ РЅР°С€Р»Рё РѕРїРёСЃР°РЅРёРµ С‚РµСЃС‚Р° '+procNames[i], reTestCaseDesc.test(text));
 	}
 }
 
-SelfScript.self['macrosTest В модуле вообще нет тестовых случаев'] = function() {
+SelfScript.self['macrosTest Р’ РјРѕРґСѓР»Рµ РІРѕРѕР±С‰Рµ РЅРµС‚ С‚РµСЃС‚РѕРІС‹С… СЃР»СѓС‡Р°РµРІ'] = function() {
 	
     var textDoc = v8New("TextDocument");
-	textDoc.Read(testDir+'xUnitAddTestsDesc_НетОпределенийТестов.txt')
+	textDoc.Read(testDir+'xUnitAddTestsDesc_РќРµС‚РћРїСЂРµРґРµР»РµРЅРёР№РўРµСЃС‚РѕРІ.txt')
 	
 	predLineCount = textDoc.LineCount()
 	predText = textDoc.GetText()
@@ -146,7 +146,7 @@ SelfScript.self['macrosTest В модуле вообще нет тестовых случаев'] = function() 
 		assertEquals(procNames, null);
 	
 	success = appender.addTestCaseDescriptionsIntoText();
-		assertFalse('Не успешно выполнили тест!', success);
+		assertFalse('РќРµ СѓСЃРїРµС€РЅРѕ РІС‹РїРѕР»РЅРёР»Рё С‚РµСЃС‚!', success);
 		assertEquals(predText, textDoc.GetText());
 		//assertEquals(TrimAll(predText), TrimAll(textDoc.GetText()));
 		assertEquals(twnd.LinesCount(), predLineCount);
