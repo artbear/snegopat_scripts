@@ -12,18 +12,19 @@ global.connectGlobals(SelfScript);
 var logger = addLogger(SelfScript.uniqueName, Log4js.Level.ERROR); //Log4js.Level.DEBUG
 
 var stopped = false
-var changedCount =0;
+var changedMdCount =0;
 var mdCount = 0;
 
 SelfScript.self['macrosВставить проверку на ОбменДанными.Загрузка в методы ПередЗаписью и ПриЗаписи для всех модулей 1С'] = function() {
 
 	stopped = false
-	changedCount =0;
+	changedMdCount =0;
 	mdCount = 0;
 
 	res = stdlib.forAllMdObjects(metadata.current.rootObject, AddCodeIntoMetadataModuleText);
-	if(mdCount != changedCount)
-		Message("Изменено "+changedCount+" модулей. Всего "+mdCount+" модулей, которые требуется изменить. Не удалось изменить "+(mdCount - changedCount) +" модулей!")
+	
+	if(mdCount != changedMdCount)
+		Message("Изменено "+changedMdCount+" модулей. Всего "+mdCount+" модулей, которые требуется изменить. Не удалось изменить "+(mdCount - changedMdCount) +" модулей!")
 	else
 		Message("Удалось изменить все модули. Всего "+mdCount+" модулей!")
 }
@@ -95,8 +96,8 @@ function AddCodeIntoMetadataModuleText(mdObj){
 						if (isSetModuleText) {
 							try{
 								mdObj.setModuleText(mdPropName, sourceText);
-								changedCount++
-								var str = ""+changedCount + ": " + mdc_name + "." + mdObj_name + formName + "." + mdPropName+ " - поменял методы - добавил проверку на ОбменДанными.Загрузка"
+								changedMdCount++
+								var str = ""+changedMdCount + ": " + mdc_name + "." + mdObj_name + formName + "." + mdPropName+ " - поменял методы - добавил проверку на ОбменДанными.Загрузка"
 								Message(str)
 								logger.debug(str)
 							}catch(e) {
