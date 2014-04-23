@@ -15,7 +15,7 @@ var stopped = false
 var changedCount =0;
 var mdCount = 0;
 
-SelfScript.self['macrosПеребрать все модули 1С из конфигурации'] = function() {
+SelfScript.self['macrosВставить проверку на ОбменДанными.Загрузка в методы ПередЗаписью и ПриЗаписи для всех модулей 1С'] = function() {
 
 	stopped = false
 	changedCount =0;
