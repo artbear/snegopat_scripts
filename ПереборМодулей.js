@@ -55,104 +55,62 @@ function AddCodeIntoMetadataModuleText(mdObj){
 
 		        var mdPropName = mdProp.name(1);
 		        if(mdObj.isPropModule(mdPropName)) {
-					//logger.debug("		" + mdPropName)
-					//Status(mdObj.parent.name + " - " +mdc_name + "." + mdObj_name + "." + mdPropName)
 					sourceText = mdObj.getModuleText(mdPropName);
 					if(sourceText.length){
 						var str = "	" + mdObj.parent.name + " - " +mdc.name(1) + formName + "." + mdObj.name + "." + mdPropName
 						Status(str)
 						logger.debug(str)
 						
-						context = SyntaxAnalysis.AnalyseModule(sourceText, true);
+						var successMessage = mdc_name + "." + mdObj_name + formName + "." + mdPropName
 						
-						var data = getNewMethodCode(context, "ПередЗаписью", sourceText);
-						if (data.HaveMethod)
+						context = SyntaxAnalysis.AnalyseModule(sourceText, true);
+
+						var isSetModuleText = false
+						var haveMethod = false
+						
+						var data = getNewMethodCode(context, "ПередЗаписью", sourceText, successMessage);
+						if (!haveMethod && data.HaveMethod){
+							haveMethod = true
 							mdCount++
-						var newText = data.NewText
-						if (newText) {
+						}
+							
+						if (data.Success){
+							isSetModuleText = true
+							sourceText = data.NewText;
+							context = SyntaxAnalysis.AnalyseModule(sourceText, true);
+						}
+						
+						var data = getNewMethodCode(context, "ПриЗаписи", sourceText, successMessage);
+						if (!haveMethod && data.HaveMethod){
+							haveMethod = true
+							mdCount++
+						}
+						
+						if (data.Success){
+							isSetModuleText = true
+							sourceText = data.NewText;
+							context = SyntaxAnalysis.AnalyseModule(sourceText, true);
+						}
+						
+						if (isSetModuleText) {
 							try{
-								mdObj.setModuleText(mdPropName, newText);
+								mdObj.setModuleText(mdPropName, sourceText);
 								changedCount++
-								var str = ""+changedCount+" " + mdc_name + "." + mdObj_name + formName + "." + mdPropName+ " - поменял метод "+methodName+" - добавил проверку на ОбменДанными.Загрузка"
+								var str = ""+changedCount + ": " + mdc_name + "." + mdObj_name + formName + "." + mdPropName+ " - поменял методы - добавил проверку на ОбменДанными.Загрузка"
 								Message(str)
 								logger.debug(str)
 							}catch(e) {
-								logger.error("Ошибка изменения текста: " + mdc_name + "." + mdObj_name + formName + "." + mdPropName+ " - метод "+methodName+"")
+								logger.error("Ошибка изменения текста: " + mdc_name + "." + mdObj_name + formName + "." + mdPropName)
 							}
 							
-							//stopped = true
 							Status("")
+							//stopped = true
+							//return
 						}
-						//}
-						
-						////methodName = "ПередЗаписью"
-						//var method = context.getMethodByName(methodName);
-						//var haveMethod = method ? true : false;
-						//if (haveMethod){
-						//	mdCount++
-						//	//if(changedCount < 2){
-						//		//logger.debug("	ПередЗаписью");
-						//		
-						//		Lines = sourceText.split("\n");
-						//		methodLines = Lines.slice(method.StartLine, method.EndLine+1);
-						//		methodText = methodLines.join("\n");
-						//		
-						//		if(!re.test(methodText)) {
-						//			//logger.debug("sourceText <"+ sourceText+">\n");
-						//			//logger.debug("methodText <"+ methodText+">\n");
-						//			
-						//			beforeLines = Lines.slice(0, method.StartLine+1);
-						//			afterLines = Lines.slice(method.StartLine+1);
-						//			
-						//			newLines = "\n\n\tЕсли ОбменДанными.Загрузка Тогда Возврат; КонецЕсли;\n\n";
-						//			newText = beforeLines.join("\n")+ newLines + afterLines.join("\n");
-						//			//logger.debug("newText <"+ newText+">\n");
-						//			//logger.debug("re.test(newText) <"+ re.test(newText)+">\n");
-						//			
-						//			try{
-						//				mdObj.setModuleText(mdPropName, newText);
-						//				changedCount++
-						//				var str = ""+changedCount+" " + mdc_name + "." + mdObj_name + formName + "." + mdPropName+ " - поменял метод "+methodName+" - добавил проверку на ОбменДанными.Загрузка"
-						//				Message(str)
-						//				logger.debug(str)
-						//			}catch(e) {
-						//				logger.error("Ошибка изменения текста: " + mdc_name + "." + mdObj_name + formName + "." + mdPropName+ " - метод "+methodName+"")
-						//			}
-						//			
-						//			//stopped = true
-						//			Status("")
-						//			//return
-						//		}
-						//	//}
-						//	//changedCount++
-						//}
-						////var method = context.getMethodByName("ПриЗаписи");
 					}
 				}
 		    }
 			
-				//sourceText = mdObj.getModuleText("МодульОбъекта");
-				//if(sourceText.length){
-				//	context = SyntaxAnalysis.AnalyseModule(sourceText, true);
-				//	var method = context.getMethodByName("ПередЗаписью");
-				//	if (!method){
-				//		//newText = sourceText + "\nПроцедура ПередЗаписью(Отказ)\n Если ОбменДанными.Загрузка Тогда \n   Возврат;\n КонецЕсли; \nКонецПроцедуры"
-				//	} else {
-				//			//Lines = sourceText.split("\n");
-				//			//beforeLines = Lines.slice(0, method.StartLine+1);
-				//			//afterLines = Lines.slice( method.StartLine+2);
-				//			//
-				//			//newLines = "\n Если ОбменДанными.Загрузка Тогда \n   Возврат;\n КонецЕсли;";
-				//			//newText = beforeLines.join("\n")+"\n" + mdObj.newText+"\n"+ afterLines.join("\n");
-				//			//
-				//			//}
-				//			//mdObj.setModuleText("МодульОбъекта", newText);
-				//		
-				//		
-				//		logger.debug(""+changedCount+"Есть МодульОбъекта.ПередЗаписью " + mdObj.mdclass.name(1) + "." + mdObj.name)
-				//		changedCount++
-				//	}
-				//}
 		}
 		catch(e){
             logger.error("Ошибка: "+e.description)
@@ -163,15 +121,15 @@ function AddCodeIntoMetadataModuleText(mdObj){
 	}
 }
 
-function getNewMethodCode(context, methodName, sourceText){
-	var res = { NewText: null, HaveMethod: false };
+function getNewMethodCode(context, methodName, sourceText, successMessage){
+	var res = { Success: false, NewText: null, HaveMethod : false };
 	
 	var re = new RegExp("^[^/]*(\\s*Если\\s+ОбменДанными\\.Загрузка\\s+Тогда\\s+Возврат\\s*;?\\s+КонецЕсли\\s*;?)");
 	
 	var method = context.getMethodByName(methodName);
-	res.HaveMethod = method ? true : false;
-	if (res.HaveMethod){
-		//mdCount++
+		
+	if (method){
+		res.HaveMethod = true
 			
 		Lines = sourceText.split("\n");
 		methodLines = Lines.slice(method.StartLine, method.EndLine+1);
@@ -190,7 +148,12 @@ function getNewMethodCode(context, methodName, sourceText){
 			//logger.debug("re.test(newText) <"+ re.test(newText)+">\n");
 			
 			res.NewText = newText;
+			res.Success = true;
+			
 			Status("")
+			var str = "		" + successMessage + " - нужно поменять метод "+methodName+""
+			Message(str)
+			logger.debug(str)
 		}
 	}
 	return res
